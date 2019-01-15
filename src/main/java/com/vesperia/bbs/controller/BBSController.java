@@ -21,8 +21,25 @@ import com.vesperia.bbs.member.MemberDetails;
 @Controller
 public class BBSController {
 
+	private final String strRoleAdmin = "ROLE_ADMIN";
 	@Autowired
 	private ArticleRepository articleRepo; // dao
+	
+	private boolean CheckModifyAuthentication(Authentication authentication, Article article, boolean delete)
+	{
+		MemberDetails user = (MemberDetails) authentication.getPrincipal();
+		boolean editable = user.getUsername().equals(article.getAuthor());
+		boolean isAdmin = user.getAuthorities().toString().contains(strRoleAdmin);
+		if(delete && (editable || isAdmin)) {
+			return true;
+		}
+		else if(!delete && editable) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 	@RequestMapping("bbs")
 	public String BBSMain(Model model) {
@@ -32,19 +49,12 @@ public class BBSController {
 	}
 
 	@GetMapping("bbs/Write")
-	public String WriteArticle(Model model/*, Article article*/, Authentication authentication) {
-		MemberDetails user = (MemberDetails) authentication.getPrincipal();
-		model.addAttribute("author", user.getUsername());
-		//article.setAuthor(user.getUsername());
-		//article.setRegdate(new Date());
-		//model.addAttribute("article", article);
+	public String WriteArticle(Model model, Authentication authentication) {
 		return "writearticle";
-		//return "redirect:/Article/" + articleRepo.save(article).getId();
 	}
 
 	@PostMapping("bbs/Write")
-	public String SaveArticle(Model model, Article article, HttpServletRequest request, Authentication authentication)
-	{
+	public String SaveArticle(Model model, Article article, HttpServletRequest request, Authentication authentication) {
 		MemberDetails user = (MemberDetails) authentication.getPrincipal();
 		article.setAuthor(user.getUsername());
 		article.setRegdate(new Date());
@@ -53,17 +63,46 @@ public class BBSController {
 		article.setViewcount(0L);
 		return "redirect:/bbs/Article_" + articleRepo.save(article).getId();
 	}
+	
+	@GetMapping("bbs/Article_{id}/Edit")
+	public String EditArticle(Authentication authentication, Model model, @PathVariable Long id) {
+		Article article = articleRepo.findById(id).get();
+		if( CheckModifyAuthentication(authentication, article, false) == false ) {
+			return "redirect:/bbs/Article_{id}";
+		}
+		model.addAttribute("article", article);
+		return "editarticle";
+	}
+	
+	@PostMapping("bbs/Article_{id}/Edit")
+	public String SaveEditedArticle(Authentication authentication, Model model, HttpServletRequest request, @PathVariable Long id) {
+		Article article = articleRepo.findById(id).get();
+		article.setContent(request.getParameter("content"));
+		article.setUpdatedate(new Date());
+		return "redirect:/bbs/Article_" + articleRepo.save(article).getId();
+	}
 
 	@RequestMapping("bbs/Article_{id}")
-	public String ViewArticle(Model model, @PathVariable Long id) {
+	public String ViewArticle(Authentication authentication, Model model, @PathVariable Long id) {
+		MemberDetails user = (MemberDetails) authentication.getPrincipal();
 		Article article = articleRepo.findById(id).get();
+		boolean isAdmin = user.getAuthorities().toString().contains(strRoleAdmin);
+		boolean editable = user.getUsername().equals(article.getAuthor());
 		model.addAttribute("article", article);
+		model.addAttribute("editable", editable);
+		model.addAttribute("isAdmin", isAdmin);
+
 		return "article";
 	}
 	
-	@RequestMapping("bbs/Article_{id}/delete")
-	public String DeleteArticle(@PathVariable Long id) {
-		articleRepo.deleteById(id);
-		return "redirect:/bbs";
+	@RequestMapping("bbs/Article_{id}/Delete")
+	public String DeleteArticle(Authentication authentication, @PathVariable Long id) {
+		if( CheckModifyAuthentication(authentication, articleRepo.getOne(id), true) ) {
+			articleRepo.deleteById(id);
+			return "redirect:/bbs";
+		}
+		else {
+			return "redirect:/bbs/Article_{id}";
+		}
 	}
 }

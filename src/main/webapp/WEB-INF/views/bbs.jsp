@@ -25,7 +25,6 @@
 					<th>#</th>
 					<th>제목</th>
 					<th>작성자</th>
-					<th>작성일</th>
 					<th>조회수</th>
 				</tr>
 			</thead>
@@ -35,7 +34,6 @@
 					<td>${article.id}</td>
 					<td><a href="/bbs/Article_${article.id}">${article.title}</a></td>
 					<td>${article.author}</td>
-					<td>${article.regdate}</td>
 					<td>${article.viewcount}</td>
 				</tr>
 				</c:forEach>

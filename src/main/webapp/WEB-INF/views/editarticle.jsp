@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Article Write Page</title>
+	<title>Article Edit Page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="//cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
@@ -17,21 +17,21 @@
 <body>
 	<div class="page-header">
 		<div class="container">
-			<h2>게시글 작성</h2><br/>
+			<h2>게시글 수정</h2><br/>
 		</div>
 	</div>
     
 	<div class="container">
 		<br/>
-		<form class="form-horizontal" role="form" id="editorForm" method="post" action="/bbs/Write">
+		<form class="form-horizontal" role="form" id="editorForm" method="post" action="/bbs/Article_${article.id}/Edit">
 			<!-- csrf 토큰을 정보와 같이 보내준다. -->
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			
 			<div class="form-group">
-            	<input id="title" name="title" type="text" class="form-control" placeholder="제목을 입력하세요"></input><br/><br/>
+            	<input id="title" name="title" type="text" class="form-control" value="${article.title}" disabled/><br/><br/>
 				<div class="form-group">
 					<div class="col-lg-12">
-						<textarea id="content" name="content"></textarea><br/>
+						<textarea id="content" name="content">${article.content}</textarea><br/>
 					</div>
 				</div>
 				<div class="form-group">

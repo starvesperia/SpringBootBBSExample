@@ -7,37 +7,35 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<style>
-		.well { background-color:  rgba(100, 180, 250, 0.4); }
-	</style>
 </head>
 
 <body>
 
 <div class="container">
 	<br/>
-	<div class="well well-lg">
-		<h1>${article.title}<br/></h1>
-		<h3><small>작성자 : ${article.author}</small>
-        <small style="float:right">게시일 : ${article.regdate}</small></h3>
+	<div class="well" style="background-color: rgba(100, 180, 250, 0.4);">
+		<h4>${article.title}<br/></h4>
+		<h4><small>${article.author}</small>
+        <small style="float:right">${article.regdate}</small></h4>
 	</div>
 
 
 	<!-- Post Content -->
-	<article>
-		<div>
-			${article.content}
-		</div>
-	</article>
+	<div class="well well-lg" style="background-color: rgba(200, 200, 200, 0.4);">
+		${article.content}
+	</div>
 	
-	<br/><br/>
 	<button class="btn btn-primary" onClick="location.href='/bbs'">☰ 글 목록</button>
-	<div class="btn-group">
-	<button onclick="location='edit'" class="btn btn-success">글 수정</button>
-	<button type="button" class="btn btn-danger"
-		onClick=" if(!confirm('글을 삭제합니다')){return false;} else{location.href='Article_${article.id}/delete'} ">
-		글 삭제
-	</button>
+	<div style="float:right">
+		<c:if test="${editable || isAdmin}">
+			<c:if test="${editable}">
+				<button class="btn btn-primary" onclick="location.href='Article_${article.id}/Edit'">글 수정</button>
+			</c:if>
+				<button class="btn btn-danger"
+					onClick=" if(!confirm('글을 삭제합니다')){return false;} else{location.href='Article_${article.id}/Delete'} ">
+					글 삭제
+				</button>
+		</c:if>
 	</div>
 </div>
 </body>
