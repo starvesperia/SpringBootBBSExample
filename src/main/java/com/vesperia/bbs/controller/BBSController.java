@@ -1,11 +1,15 @@
 package com.vesperia.bbs.controller;
 
 import java.util.Date;
-import java.util.List;
+//import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.vesperia.bbs.board.Article;
 import com.vesperia.bbs.board.ArticleRepository;
+import com.vesperia.bbs.board.PageManager;
 import com.vesperia.bbs.member.MemberDetails;
 
 @Controller
 public class BBSController {
 
 	private final String strRoleAdmin = "ROLE_ADMIN";
+	private final int PAGES_PER_SECTION = 5;
+	private final int ARTICLES_PER_PAGE = 10;
 	@Autowired
 	private ArticleRepository articleRepo; // dao
 	
@@ -43,9 +50,14 @@ public class BBSController {
 	}
 
 	@RequestMapping("bbs")
-	public String BBSMain(Model model) {
-		List<Article> articleList = articleRepo.findAll();
-		model.addAttribute("articleList", articleList);
+	public String BBSMain(Model model, // id 역순으로 정렬. 한 페이지당 게시글 10개씩
+			@PageableDefault(sort = {"id"}, direction = Direction.DESC, size = ARTICLES_PER_PAGE) Pageable pageable) {
+		// List<Article> articleList = articleRepo.findAll();
+		Page<Article> articlePage = articleRepo.findAll(pageable);
+		PageManager pageManager = new PageManager(articlePage, PAGES_PER_SECTION);
+		model.addAttribute("articlePage", articlePage);
+		model.addAttribute("pageManager", pageManager);
+		model.addAttribute("pagesPerSection", PAGES_PER_SECTION);
 		return "bbs";
 	}
 
@@ -93,7 +105,8 @@ public class BBSController {
 		model.addAttribute("article", article);
 		model.addAttribute("editable", editable);
 		model.addAttribute("isAdmin", isAdmin);
-		articleRepo.setIncreasedViewcount(id);
+		
+		articleRepo.setIncreasedViewcount(id); // 조회수 증가
 		return "article";
 	}
 	

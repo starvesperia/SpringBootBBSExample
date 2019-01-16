@@ -9,5 +9,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 	@Modifying
 	@Query("update Article A set A.viewcount = A.viewcount+1 where A.id=?1")
 	int setIncreasedViewcount(Long id);
-	
+
 }

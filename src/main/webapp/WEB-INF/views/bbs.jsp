@@ -29,7 +29,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="article" items="${articleList}">
+				<c:forEach var="article" items="${articlePage.content}">
 				<tr>
 					<td>${article.id}</td>
 					<td><a href="/bbs/Article_${article.id}">${article.title}</a></td>
@@ -39,6 +39,56 @@
 				</c:forEach>
 			</tbody>
 		</table>
+		<ul class="pagination">
+
+			<c:choose>
+				<c:when test="${articlePage.number == 0}">
+					<li class="page-item disabled"><a href="#">&lt;&lt;</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="?page=0">&lt;&lt;</a></li>
+				</c:otherwise>
+			</c:choose>
+
+			<c:choose>
+				<c:when test="${pageManager.isFirstSection}">
+					<li class="page-item disabled"><a href="#">&lt;</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="?page=${pageManager.firstPageInSection-1}">&lt;</a></li>
+				</c:otherwise>
+			</c:choose>
+
+			<c:forEach var="i" begin="${pageManager.firstPageInSection}" end="${pageManager.lastPageInSection}" step="1">
+				<c:choose>
+					<c:when test="${i == articlePage.number}">
+						<li class="page-item active"><a href="?page=${i}">${i+1}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li class="page-item"><a href="?page=${i}">${i+1}</a></li>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+
+			<c:choose>
+				<c:when test="${pageManager.isLastSection}">
+					<li class="page-item disabled"><a href="#">&gt;</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="?page=${pageManager.lastPageInSection+1}">&gt;</a></li>
+				</c:otherwise>
+			</c:choose>
+
+			<c:choose>
+				<c:when test="${articlePage.number == articlePage.totalPages-1}">
+					<li class="page-item disabled"><a href="#">&gt;&gt;</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="?page=${articlePage.totalPages-1}">&gt;&gt;</a></li>
+				</c:otherwise>
+			</c:choose>
+
+		</ul>
 	</div>
 </div>
 
