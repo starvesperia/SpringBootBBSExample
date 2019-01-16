@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,6 +83,7 @@ public class BBSController {
 		return "redirect:/bbs/Article_" + articleRepo.save(article).getId();
 	}
 
+	@Transactional
 	@RequestMapping("bbs/Article_{id}")
 	public String ViewArticle(Authentication authentication, Model model, @PathVariable Long id) {
 		MemberDetails user = (MemberDetails) authentication.getPrincipal();
@@ -91,7 +93,7 @@ public class BBSController {
 		model.addAttribute("article", article);
 		model.addAttribute("editable", editable);
 		model.addAttribute("isAdmin", isAdmin);
-
+		articleRepo.setIncreasedViewcount(id);
 		return "article";
 	}
 	

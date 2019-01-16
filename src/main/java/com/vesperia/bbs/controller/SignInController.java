@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class SignInController {
 	@RequestMapping("/SignIn")
-	public String SignInForm(HttpServletRequest request) {
+	public String SignInForm(HttpServletRequest request, Authentication authentication) {
+		
+		if(authentication != null) {
+			return "redirect:/Home";
+		}
+		
 		String referer = request.getHeader("Referer");
 		
 		if(referer != null && !referer.contains("/SignIn")) {
