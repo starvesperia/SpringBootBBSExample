@@ -22,7 +22,7 @@ public class SignInSuccessHandler extends SavedRequestAwareAuthenticationSuccess
 			Authentication authentication) throws ServletException, IOException {
 		System.out.println("Authentication success!");
 		HttpSession session = request.getSession();
-		if (session != null) {			
+		if (session != null) {
 			String redirectUrl = (String) session.getAttribute("prevPage");
 			if (redirectUrl != null) {
 				session.removeAttribute("prevPage");

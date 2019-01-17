@@ -25,8 +25,8 @@
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<div class="row">
 		<div class="col-xs-4">
-			<label for="email">E-Mail</label>
-			<input id="email" type="email" name="username" placeholder="Enter email" class="form-control"/><br/>			
+			<label for="username">User ID</label>
+			<input id="username" type="text" name="username" placeholder="Enter user ID" class="form-control"/><br/>			
 		</div>
 	</div>
 	<div class="row">
@@ -34,6 +34,11 @@
 			<label for="password">Password</label>
 			<input id="password" type="password" name="password" placeholder="Enter password" class="form-control"/><br/>
 		</div>
+	</div>
+	<div class="checkbox">
+		<label>
+			<input name="remember-me" type="checkbox"> Remember Me
+		</label>
 	</div>
 	<br/>
     <input class="btn btn-primary" type="submit" value="Sign-in"/>

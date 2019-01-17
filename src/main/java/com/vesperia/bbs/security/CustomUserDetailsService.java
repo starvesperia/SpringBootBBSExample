@@ -19,9 +19,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 	MemberRepository memberRepo;
 	
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException, NoSuchElementException {
+	public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException, NoSuchElementException {
+		Member member = memberRepo.findByUid(uid).get();
+		return new MemberDetails(member);
+	}
+	
+	public UserDetails loadUserByUemail(String email) throws UsernameNotFoundException, NoSuchElementException {
 		Member member = memberRepo.findByUemail(email).get();
 		return new MemberDetails(member);
 	}
-
 }

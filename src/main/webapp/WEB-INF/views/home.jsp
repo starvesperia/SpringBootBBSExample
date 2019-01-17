@@ -1,5 +1,6 @@
 <%@ page language= "java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <html>
 <head>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -13,6 +14,12 @@
 	<div class="container">
 	<h1>BBS Test page</h1>
 	<P>  The time on the server is ${serverTime}. </P>
+	<sec:authorize access="isFullyAuthenticated()">
+        <P># Signed in by id / password.</P>
+    </sec:authorize>
+    <sec:authorize access="isRememberMe()">
+        <P># Signed in by Remember-me.</P>
+    </sec:authorize>
 	</div>
 </div>
 

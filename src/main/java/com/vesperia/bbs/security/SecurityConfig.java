@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,14 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.failureUrl("/SignIn")
 			.permitAll()
 			.and()
-//		.rememberMe()
-//			.key("myAppKey")
-//			.rememberMeParameter("remember-me")			
-//			.rememberMeCookieName("remember-me")
-//			.tokenValiditySeconds(86400)
-//			.userDetailsService(memberDetailsService)
-//			.tokenRepository(persistentTokenRepository())
-//			.and()
+		.rememberMe()
+			.key("myAppKey")
+			.rememberMeParameter("remember-me")
+			.tokenRepository(persistentTokenRepository())
+			.rememberMeCookieName("remember-me")
+			.tokenValiditySeconds(60*60*24*7)
+			.and()
 		.logout()
 			.logoutRequestMatcher(new AntPathRequestMatcher("/SignOut"))
 			.logoutSuccessUrl("/Home")
