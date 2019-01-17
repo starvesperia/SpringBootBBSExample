@@ -1,4 +1,4 @@
-package com.modim.bbs;
+package com.vesperia.bbs;
 
 import java.sql.Connection;
 

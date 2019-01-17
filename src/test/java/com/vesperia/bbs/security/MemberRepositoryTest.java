@@ -1,4 +1,4 @@
-package com.modim.bbs.security;
+package com.vesperia.bbs.security;
 
 import java.util.Arrays;
 import java.util.Optional;
