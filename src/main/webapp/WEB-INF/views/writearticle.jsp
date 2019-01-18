@@ -9,6 +9,7 @@
 	<script src="//cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/resources/js/formSubmitControl.js"></script>
 	
 	<!-- csrf 토큰 -->
 	<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
@@ -23,7 +24,7 @@
     
 	<div class="container">
 		<br/>
-		<form class="form-horizontal" role="form" id="editorForm" method="post" action="/bbs/Write">
+		<form class="form-horizontal" role="form" id="editorForm" name="editorForm" method="post" action="/bbs/Write">
 			<!-- csrf 토큰을 정보와 같이 보내준다. -->
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			
@@ -36,8 +37,8 @@
 				</div>
 				<div class="form-group">
 					<div class="col-lg-12">
-					<button class="btn btn-primary" onClick="location.href='/bbs'">☰ 글 목록</button>
-					<button type="submit" class="btn btn-primary" style="float:right">저장</button>
+					<button type="button" class="btn btn-primary" onClick="location.href='/bbs'">☰ 글 목록</button>
+					<button type="button" class="btn btn-primary" style="float:right" onClick="fncSubmit(editorForm);">저장</button>
 					</div>
 				</div>
 			</div>

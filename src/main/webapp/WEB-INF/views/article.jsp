@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/resources/js/buttonEventControl.js"></script>
 </head>
 
 <body>
@@ -29,11 +30,10 @@
 	<div style="float:right">
 		<c:if test="${editable || isAdmin}">
 			<c:if test="${editable}">
-				<button class="btn btn-primary" onclick="location.href='Article_${article.id}/Edit'">글 수정</button>
+				<button class="btn btn-primary" onclick="execute('Article_${article.id}/Edit')">글 수정</button>
 			</c:if>
 				<button class="btn btn-danger"
-					onClick=" if(!confirm('글을 삭제합니다')){return false;} else{location.href='Article_${article.id}/Delete'} ">
-					글 삭제
+					onclick="if(!confirm('글을 삭제합니다')){return false;} else{execute('Article_${article.id}/Delete')}" >글 삭제
 				</button>
 		</c:if>
 	</div>

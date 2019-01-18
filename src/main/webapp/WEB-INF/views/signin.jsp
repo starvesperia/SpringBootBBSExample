@@ -4,6 +4,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/resources/js/formSubmitControl.js"></script>
 
 	<!-- csrf 토큰 -->
 	<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
@@ -20,7 +21,7 @@
 
 <div class="container">
 
-<form class="login-form" method="POST">
+<form class="login-form" name="loginForm" method="POST">
 	<!-- csrf 토큰을 정보와 같이 보내준다. -->
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<div class="row">
@@ -41,7 +42,7 @@
 		</label>
 	</div>
 	<br/>
-    <input class="btn btn-primary" type="submit" value="Sign-in"/>
+    <button type="button" class="btn btn-primary" onClick="fncSubmit(loginForm);">Sign-in</button>
 </form>
 
 </div>
