@@ -30,6 +30,7 @@ public class BBSController {
 	private final String strRoleAdmin = "ROLE_ADMIN";
 	private final int PAGES_PER_SECTION = 5;
 	private final int ARTICLES_PER_PAGE = 10;
+
 	@Autowired
 	private ArticleRepository articleRepo; // dao
 	
@@ -50,15 +51,38 @@ public class BBSController {
 	}
 
 	@RequestMapping("bbs")
-	public String BBSMain(Model model, // id 역순으로 정렬. 한 페이지당 게시글 10개씩
+	public String BBSMain(Model model, HttpServletRequest request,
 			@PageableDefault(sort = {"id"}, direction = Direction.DESC, size = ARTICLES_PER_PAGE) Pageable pageable) {
-		// List<Article> articleList = articleRepo.findAll();
-		Page<Article> articlePage = articleRepo.findAll(pageable);
+							// id 역순으로 정렬. 한 페이지당 게시글 10개씩
+		String category = request.getParameter("category");
+		String keyword = request.getParameter("keyword");
+		Page<Article> articlePage = getPageData(pageable, articleRepo, category, keyword);
+		if(category == null) { category = "제목"; }
+		model.addAttribute("category", category);
+		model.addAttribute("keyword", keyword);
+
 		PageManager pageManager = new PageManager(articlePage, PAGES_PER_SECTION);
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("pageManager", pageManager);
 		model.addAttribute("pagesPerSection", PAGES_PER_SECTION);
 		return "bbs";
+	}
+
+	private Page<Article> getPageData(Pageable pageable, ArticleRepository articleRepo, String category, String keyword) {
+		Page<Article> articlePage = null;
+		if(category == null) {
+			articlePage = articleRepo.findAll(pageable);
+		}
+		else if(category.equals("제목")) {
+			articlePage = articleRepo.findByTitleIgnoreCaseContaining(keyword, pageable);
+		}
+		else if(category.equals("본문")) {
+			articlePage = articleRepo.findByContentIgnoreCaseContaining(keyword, pageable);
+		}
+		else {// if (category.equals("작성자")) {
+			articlePage = articleRepo.findByAuthorIgnoreCaseContaining(keyword, pageable);
+		}
+		return articlePage;
 	}
 
 	@GetMapping("bbs/Write")

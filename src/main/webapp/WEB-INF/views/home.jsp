@@ -37,7 +37,6 @@
 			<button onclick="location='SignOut'" class="btn btn-primary">Sign-Out</button><br/><br/>
 		</c:otherwise>
 	</c:choose>
-
 	<button onclick="location='bbs'" class="btn btn-primary">BBS</button><br/>
 </div>
 </body>
